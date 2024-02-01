@@ -1,0 +1,18 @@
+[submodule "common/glm"]
+	path = common/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "common/spdlog"]
+	path = common/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "common/imgui"]
+	path = common/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "common/glfw"]
+	path = common/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "common/glew-cmake"]
+	path = common/glew-cmake
+	url = https://github.com/Perlmint/glew-cmake.git
+[submodule "test/googletest"]
+	path = test/googletest
+	url = https://github.com/google/googletest.git

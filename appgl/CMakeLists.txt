@@ -3,10 +3,47 @@
 #
 
 # Add source to this project's executable.
-add_executable (appgl "main.cpp" )
+add_library(appgl STATIC "src/gui.cpp" "src/platform.cpp")
+target_include_directories(appgl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET appgl PROPERTY CXX_STANDARD 20)
-endif()
+set_property(TARGET appgl PROPERTY CXX_STANDARD 23)
 
-# TODO: Add tests and install targets if needed.
+find_package(OpenGL REQUIRED)
+
+# Include the subdirectories for each library
+add_subdirectory(${COMMON_LIBS_DIR}/spdlog spdlog)
+get_target_property(spdlog_includes spdlog INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(appgl INTERFACE ${spdlog_includes})
+
+add_subdirectory(${COMMON_LIBS_DIR}/glm glm)
+get_target_property(glm_includes glm INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(appgl INTERFACE ${glm_includes})
+
+add_subdirectory(${COMMON_LIBS_DIR}/glfw glfw)
+get_target_property(glfw_includes glfw INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(appgl INTERFACE ${glfw_includes})
+
+# Set ONLY_LIBS to ON before including the subdirectory
+set(ONLY_LIBS ON CACHE BOOL "Build only libraries")
+add_subdirectory(${COMMON_LIBS_DIR}/glew-cmake glew)
+get_target_property(glew_includes libglew_static INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(appgl INTERFACE ${glew_includes})
+set(ONLY_LIBS OFF CACHE BOOL "Build only libraries" FORCE)
+
+# Add imgui source files
+set(IMGUI_DIR ${COMMON_LIBS_DIR}/imgui)
+file(GLOB IMGUI_SOURCES 
+     ${IMGUI_DIR}/imgui.cpp 
+     ${IMGUI_DIR}/imgui_draw.cpp 
+     ${IMGUI_DIR}/imgui_widgets.cpp 
+     ${IMGUI_DIR}/imgui_tables.cpp
+     ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp 
+     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp)
+
+# Add imgui headers
+include_directories(${IMGUI_DIR} ${IMGUI_DIR}/backends)
+target_include_directories(appgl INTERFACE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+
+# Link the libraries to your project
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL spdlog::spdlog glm glfw libglew_static)
+target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_SOURCES})
