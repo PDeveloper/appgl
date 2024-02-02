@@ -1,9 +1,25 @@
 #include "appgl/platform.hpp"
 
+#if defined(_MSC_VER)
+    //  Microsoft 
+    #define EXPORT __declspec(dllexport)
+    #define IMPORT __declspec(dllimport)
+#elif defined(__GNUC__)
+    //  GCC
+    #define EXPORT __attribute__((visibility("default")))
+    #define IMPORT
+    #define __stdcall
+#else
+    //  do nothing and hope for the best?
+    #define EXPORT
+    #define IMPORT
+    #pragma warning Unknown dynamic link import/export semantics.
+#endif
+
 extern "C"
 {
-    __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-    __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+    EXPORT unsigned long NvOptimusEnablement = 0x00000001;
+    EXPORT int AmdPowerXpressRequestHighPerformance = 1;
 
     static void __stdcall glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
     {

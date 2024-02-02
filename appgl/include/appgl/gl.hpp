@@ -3,7 +3,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 static inline const char* glerror_to_string(GLenum err)
 {
