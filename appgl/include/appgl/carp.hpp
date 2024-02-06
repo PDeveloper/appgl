@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <vector>
 
+namespace carp {
+
 template<typename T>
 concept Parseable = requires(T a, std::span<std::string_view> sv, size_t nvalues) {
 	{ a.parse(sv, nvalues) } -> std::same_as<size_t>;
@@ -221,3 +223,5 @@ public:
 		carp_args::parse(args);
 	}
 };
+
+} // namespace carp

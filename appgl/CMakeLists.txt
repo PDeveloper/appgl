@@ -3,8 +3,17 @@
 #
 
 # Add source to this project's executable.
-add_library(appgl STATIC "src/gui.cpp" "src/platform.cpp")
+add_library(appgl STATIC
+     "src/display.cpp"
+     "src/gl.cpp"
+     "src/gui.cpp"
+     "src/logging.cpp"
+     "src/platform.cpp"
+     "src/window.cpp"
+)
 target_include_directories(appgl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_compile_definitions(appgl PRIVATE $<$<CONFIG:Debug>:DEBUG_OPENGL>)
 
 set_property(TARGET appgl PROPERTY CXX_STANDARD 23)
 

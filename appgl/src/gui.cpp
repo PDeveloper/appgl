@@ -3,24 +3,28 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-Gui::Gui(Window& window) :
-        window(window)
+namespace appgl {
+
+Gui::Gui(Window& window, bool install_callbacks, const std::string& glsl_version) :
+    window(window)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui_ImplGlfw_InitForOpenGL(window, install_callbacks);
+    ImGui_ImplOpenGL3_Init(glsl_version.c_str());
 }
 Gui::~Gui() {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-    }
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
 
+void Gui::init_callbacks() {
+    ImGui_ImplGlfw_InstallCallbacks(window);
+}
 void Gui::frame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -29,9 +33,13 @@ void Gui::frame() {
 
 void Gui::render() {
     ImGui::Render();
-    int display_w, display_h;
-    glfwGetFramebufferSize(window, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
+
+    auto [display_width, display_height] = window.framebuffer_size();
+
+    glViewport(0, 0, display_width, display_height);
     glClear(GL_COLOR_BUFFER_BIT);
+
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
+} // namespace appgl

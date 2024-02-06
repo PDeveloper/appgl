@@ -1,11 +1,14 @@
 #pragma once
 
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 #include <GL/glew.h>
 
-static inline const char* glerror_to_string(GLenum err)
+namespace appgl {
+
+static inline const char* gl_error_to_string(GLenum err)
 {
     switch (err)
     {
@@ -19,3 +22,7 @@ static inline const char* glerror_to_string(GLenum err)
     default:                   return "Unknown error";
     }
 }
+
+bool gl_init();
+
+} // namespace appgl
