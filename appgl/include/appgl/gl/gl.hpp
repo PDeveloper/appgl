@@ -6,6 +6,8 @@
 #endif
 #include <GL/glew.h>
 
+#include <string>
+
 namespace appgl {
 
 static inline const char* gl_error_to_string(GLenum err)
@@ -24,5 +26,33 @@ static inline const char* gl_error_to_string(GLenum err)
 }
 
 bool gl_init();
+
+GLenum gl_image_format(int channels);
+
+class Shader {
+public:
+    unsigned int id;
+
+    Shader(const std::string& vertex_path, const std::string& fragment_path);
+
+    void use();
+
+    void check_compile_errors(GLuint shader, const std::string& type);
+    void check_link_errors(GLuint shader);
+};
+
+struct Texture {
+    unsigned int id;
+    int width, height;
+    GLenum format;
+
+    Texture();
+    ~Texture();
+    
+    bool load(const std::string& image_path);
+    bool update(unsigned char* data, int new_width = 0, int new_height = 0, GLenum new_format = 0, GLint wrap = GL_REPEAT, GLint filter = GL_LINEAR, GLint type = GL_UNSIGNED_BYTE);
+    
+    void use();
+};
 
 } // namespace appgl

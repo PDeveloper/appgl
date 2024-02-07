@@ -8,15 +8,14 @@
 namespace appgl {
 
 struct Gui {
-    Window& window;
-
-    Gui(Window& window, bool install_callbacks = true, const std::string& glsl_version = "#version 330");
+    Gui();
     ~Gui();
 
-    void init_callbacks();
-
+    void init(Window& window, bool install_callbacks = true, const std::string& glsl_version = "#version 330");
+    void callbacks(Window& window);
+    
     void frame();
-    void render();
+    void render(Window& window);
 };
 
 } // namespace appgl

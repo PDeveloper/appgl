@@ -4,11 +4,14 @@
 
 # Add source to this project's executable.
 add_library(appgl STATIC
+     "src/ui/imgui_theme.cpp"
+     "src/utils/stats.cpp"
      "src/display.cpp"
-     "src/gl.cpp"
+     "src/gl/gl.cpp"
      "src/gui.cpp"
      "src/logging.cpp"
      "src/platform.cpp"
+     "src/stb.cpp"
      "src/window.cpp"
 )
 target_include_directories(appgl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -32,6 +35,10 @@ add_subdirectory(${COMMON_LIBS_DIR}/glfw glfw)
 get_target_property(glfw_includes glfw INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(appgl INTERFACE ${glfw_includes})
 
+add_subdirectory(${COMMON_LIBS_DIR}/nativefiledialog-extended nfd)
+get_target_property(nfd_includes nfd INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(appgl INTERFACE ${nfd_includes})
+
 # Set ONLY_LIBS to ON before including the subdirectory
 set(ONLY_LIBS ON CACHE BOOL "Build only libraries")
 add_subdirectory(${COMMON_LIBS_DIR}/glew-cmake glew)
@@ -53,6 +60,11 @@ file(GLOB IMGUI_SOURCES
 include_directories(${IMGUI_DIR} ${IMGUI_DIR}/backends)
 target_include_directories(appgl INTERFACE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 
+# Add stb headers
+set(STB_HEADERS ${COMMON_LIBS_DIR}/stb)
+include_directories(appgl INTERFACE ${STB_HEADERS})
+target_include_directories(appgl INTERFACE ${STB_HEADERS})
+
 # Link the libraries to your project
-target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL spdlog::spdlog glm glfw libglew_static)
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL spdlog::spdlog glm glfw libglew_static nfd)
 target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_SOURCES})

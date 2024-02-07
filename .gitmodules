@@ -16,3 +16,9 @@
 [submodule "test/googletest"]
 	path = test/googletest
 	url = https://github.com/google/googletest.git
+[submodule "common/stb"]
+	path = common/stb
+	url = https://github.com/nothings/stb.git
+[submodule "common/nativefiledialog-extended"]
+	path = common/nativefiledialog-extended
+	url = https://github.com/btzy/nativefiledialog-extended.git

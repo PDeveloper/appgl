@@ -12,7 +12,7 @@ Display::Initializer::Initializer(Window& window) {
 Display::Display(Window&& window) :
     window(std::move(window)),
     initializer(this->window),
-    gui(this->window)
+    gui()
 {
 }
 

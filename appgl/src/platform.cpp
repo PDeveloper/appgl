@@ -1,5 +1,7 @@
 #include "appgl/platform.hpp"
 
+#include <nfd.hpp>
+
 namespace appgl {
 
 Platform::Platform() {
@@ -7,8 +9,10 @@ Platform::Platform() {
         spdlog::error("Failed to initialize GLFW");
         std::exit(EXIT_FAILURE);
     }
+    NFD::Init();
 }
 Platform::~Platform() {
+    NFD::Quit();
     glfwTerminate();
 }
 void Platform::poll_events() {
