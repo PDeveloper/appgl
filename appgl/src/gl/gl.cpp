@@ -272,7 +272,7 @@ void Texture::use() {
 }
 
 // Update the texture with new image data
-bool Texture::update(unsigned char* data, int new_width, int new_height, GLenum new_format, GLint wrap, GLint filter, GLint type) {
+bool Texture::update(const unsigned char* data, int new_width, int new_height, GLenum new_format, GLint wrap, GLint filter, GLint type) {
     if (!data) {
         appgl::logger("GL")->error("Invalid data provided for texture update.");
         return false;

@@ -50,7 +50,7 @@ struct Texture {
     ~Texture();
     
     bool load(const std::string& image_path);
-    bool update(unsigned char* data, int new_width = 0, int new_height = 0, GLenum new_format = 0, GLint wrap = GL_REPEAT, GLint filter = GL_LINEAR, GLint type = GL_UNSIGNED_BYTE);
+    bool update(const unsigned char* data, int new_width = 0, int new_height = 0, GLenum new_format = 0, GLint wrap = GL_REPEAT, GLint filter = GL_LINEAR, GLint type = GL_UNSIGNED_BYTE);
     
     void use();
 };

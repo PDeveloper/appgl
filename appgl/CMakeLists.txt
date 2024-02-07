@@ -4,7 +4,9 @@
 
 # Add source to this project's executable.
 add_library(appgl STATIC
+     "src/ui/imgui_nodes.cpp"
      "src/ui/imgui_theme.cpp"
+     "src/ui/imgui_widgets.cpp"
      "src/utils/stats.cpp"
      "src/display.cpp"
      "src/gl/gl.cpp"

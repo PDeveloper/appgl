@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../gui.hpp"
-#include "../utils/stats.hpp"
+#include "appgl/gui.hpp"
+#include "appgl/utils/stats.hpp"
 
 #include <algorithm>
 #include <vector>
@@ -10,8 +10,6 @@ namespace appgl::ui {
 
 // Class to track the fps and memory usage of the application
 struct Performance {
-    bool show = true;
-
 	size_t frame_count = 0;
 	double last_time = 0.0;
 	double fps = 0.0;
@@ -34,18 +32,13 @@ struct Performance {
             frame_count = 0;
         }
 
-        if (show) {
-            ImGui::Begin("Performance", &show, ImGuiWindowFlags_AlwaysAutoResize);
+        size_t memory_usage = utils::get_memory_usage() / (1024 * 1024);
+        size_t gpu_memory_usage = utils::get_gpu_memory_usage() / (1024 * 1024);
+        auto stats_str = fmt::format("{:.1f}fps | RAM: {}MB | GPU: {}MB", fps, memory_usage, gpu_memory_usage);
+        ImGui::Text(stats_str.c_str());
 
-            size_t memory_usage = utils::get_memory_usage() / (1024 * 1024);
-            size_t gpu_memory_usage = utils::get_gpu_memory_usage() / (1024 * 1024);
-            auto stats_str = fmt::format("{:.1f}fps | RAM: {}MB | GPU: {}MB", fps, memory_usage, gpu_memory_usage);
-            ImGui::Text(stats_str.c_str());
-
-            ImGui::PlotLines("", fps_buffer.data(), (int)fps_buffer.size(), 0, NULL, 0.0f, max_fps, ImVec2(0, 80));
-
-            ImGui::End();
-        }
+        auto width = ImGui::GetContentRegionAvail().x;
+        ImGui::PlotLines("", fps_buffer.data(), (int)fps_buffer.size(), 0, NULL, 0.0f, max_fps, ImVec2(width, 80));
 	}
 };
 

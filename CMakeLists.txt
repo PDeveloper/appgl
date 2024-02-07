@@ -16,6 +16,3 @@ set(COMMON_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 # Include the 'appgl' library subproject
 add_subdirectory(appgl)
-
-# Include the 'example' executable subproject
-add_subdirectory(example)
