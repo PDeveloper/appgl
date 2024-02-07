@@ -1,15 +1,21 @@
 #pragma once
 
-#include "platform.hpp"
-
+#include "window.hpp"
 #include "imgui.h"
 
-struct Gui {
-    Window& window;
+#include <string>
 
-    Gui(Window& window);
+namespace appgl {
+
+struct Gui {
+    Gui();
     ~Gui();
 
+    void init(Window& window, bool install_callbacks = true, const std::string& glsl_version = "#version 330");
+    void callbacks(Window& window);
+    
     void frame();
-    void render();
+    void render(Window& window);
 };
+
+} // namespace appgl
