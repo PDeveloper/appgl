@@ -42,11 +42,13 @@ public:
 };
 
 struct Texture {
-    unsigned int id;
-    int width, height;
+    unsigned int id = -1;
+    int width, height = 0;
     GLenum format;
 
     Texture();
+    Texture(Texture&& other);
+    Texture(const Texture&) = delete;
     ~Texture();
     
     bool load(const std::string& image_path);

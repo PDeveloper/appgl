@@ -237,12 +237,14 @@ void Shader::check_link_errors(GLuint shader) {
     }
 }
 
-Texture::Texture() : id(0), width(0), height(0), format(0) {
+Texture::Texture() : id(-1), width(0), height(0), format(0) {
     glGenTextures(1, &id);
 }
-
+Texture::Texture(Texture&& other) : id(other.id), width(other.width), height(other.height), format(other.format) {
+    other.id = -1;
+}
 Texture::~Texture() {
-    glDeleteTextures(1, &id);
+    if (id != -1) glDeleteTextures(1, &id);
 }
 
 // Load texture image data from a file
