@@ -5,6 +5,8 @@
 #include <cstdlib> // For getenv()
 #include <string>
 #if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <windows.h>
 #include <shlobj.h> // For SHGetFolderPath()
 #elif defined(__APPLE__)
@@ -20,7 +22,7 @@ std::string get_app_data_directory() {
 #if defined(_WIN32)
     // Windows
     char appDataPath[MAX_PATH];
-    if (SUCCEEDED(SHGetKnownFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, appDataPath))) {
+    if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, appDataPath))) {
         path = appDataPath;
     }
 #elif defined(__APPLE__)
