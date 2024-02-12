@@ -4,33 +4,39 @@
 #include "appgl/utils/stats.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <vector>
 
 namespace appgl::ui {
 
 // Class to track the fps and memory usage of the application
 struct Performance {
+    size_t fps_buffer_size = 100;
+
 	size_t frame_count = 0;
-	double last_time = 0.0;
+    std::chrono::high_resolution_clock::time_point frame_time = std::chrono::high_resolution_clock::now();
+
 	double fps = 0.0;
 
-    float max_fps = 0.0f;
     std::vector<float> fps_buffer;
 
 	void render() {
-        double current_time = glfwGetTime();
         frame_count++;
 
-        auto delta = current_time - last_time;
-        if (delta >= 1.0) {
-            last_time = current_time;
-            fps = static_cast<double>(frame_count) / delta;
+        auto now = std::chrono::high_resolution_clock::now();
+        auto duration = frame_time - now;
+
+        if (duration >= std::chrono::seconds(1)) {
+            frame_time = now;
+            fps = static_cast<double>(frame_count) / (std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count() / 1000000000.0);
+
             fps_buffer.emplace_back(static_cast<float>(fps));
-            if (fps_buffer.size() > 100) fps_buffer.erase(fps_buffer.begin());
-            max_fps = *std::max_element(fps_buffer.begin(), fps_buffer.end());
+            if (fps_buffer.size() > fps_buffer_size) fps_buffer.erase(fps_buffer.begin());
 
             frame_count = 0;
         }
+
+        float max_fps = !fps_buffer.empty() ? *std::max_element(fps_buffer.begin(), fps_buffer.end()) : 0.0f;
 
         size_t memory_usage = utils::get_memory_usage() / (1024 * 1024);
         size_t gpu_memory_usage = utils::get_gpu_memory_usage() / (1024 * 1024);

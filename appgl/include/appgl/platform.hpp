@@ -7,6 +7,8 @@
 
 namespace appgl {
 
+std::string get_app_data_directory();
+
 class Platform {
 public:
     Platform();
