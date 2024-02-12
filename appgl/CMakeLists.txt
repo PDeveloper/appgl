@@ -25,6 +25,7 @@ set_property(TARGET appgl PROPERTY CXX_STANDARD 23)
 find_package(OpenGL REQUIRED)
 
 # Include the subdirectories for each library
+target_compile_definitions(appgl PUBLIC SPDLOG_COMPILED_LIB)
 add_subdirectory(${COMMON_LIBS_DIR}/spdlog spdlog)
 get_target_property(spdlog_includes spdlog INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(appgl INTERFACE ${spdlog_includes})
