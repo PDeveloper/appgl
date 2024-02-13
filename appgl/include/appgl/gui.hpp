@@ -1,6 +1,7 @@
 #pragma once
 
 #include "window.hpp"
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui.h"
 
 #include <string>

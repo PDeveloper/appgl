@@ -2,8 +2,15 @@
 # project specific logic here.
 #
 
+option(BUILD_SHARED_LIBS "Build as a shared library" OFF)
+if(BUILD_SHARED_LIBS)
+    set(LIB_TYPE SHARED)
+else()
+    set(LIB_TYPE STATIC)
+endif()
+
 # Add source to this project's executable.
-add_library(appgl STATIC
+add_library(appgl ${LIB_TYPE}
      "src/ui/imgui_nodes.cpp"
      "src/ui/imgui_theme.cpp"
      "src/ui/imgui_widgets.cpp"
@@ -17,9 +24,7 @@ add_library(appgl STATIC
      "src/window.cpp"
 )
 target_include_directories(appgl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 target_compile_definitions(appgl PRIVATE $<$<CONFIG:Debug>:DEBUG_OPENGL>)
-
 set_property(TARGET appgl PROPERTY CXX_STANDARD 23)
 
 find_package(OpenGL REQUIRED)
@@ -57,7 +62,9 @@ file(GLOB IMGUI_SOURCES
      ${IMGUI_DIR}/imgui_widgets.cpp 
      ${IMGUI_DIR}/imgui_tables.cpp
      ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp 
-     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp)
+     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+     ${IMGUI_DIR}/misc/cpp/imgui_stdlib.cpp
+)
 
 # Add imgui headers
 include_directories(${IMGUI_DIR} ${IMGUI_DIR}/backends)

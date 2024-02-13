@@ -11,6 +11,13 @@ endif()
 
 project(appgl)
 
+function(inherit_interface_includes target_from target_to)
+    get_target_property(includes ${target_from} INTERFACE_INCLUDE_DIRECTORIES)
+    if(includes)
+        target_include_directories(${target_to} INTERFACE ${includes})
+    endif()
+endfunction()
+
 # Set the path for the common libraries
 set(COMMON_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
