@@ -1,8 +1,14 @@
 #include <GLFW/glfw3.h>
 
+#include <algorithm>
 #include <functional>
 #include <string>
 #include <vector>
+
+/**
+ * SHORtcut handler
+ * @brief A simple shortcut handler for GLFW
+*/
 
 namespace shor {
 
@@ -46,15 +52,19 @@ public:
         }
 
         void check(int key, int mods) {
-            if (key == _key && mods & _mods == _mods) {
+            if (key == _key && mods == _mods) {
                 _callback();
             }
         }
 
         std::string string() {
             std::string str = glfwGetKeyName(_key, 0);
+            std::transform(str.begin(), str.end(), str.begin(), ::toupper);
             if (_mods & GLFW_MOD_SHIFT) {
                 str = "Shift+" + str;
+            }
+            if (_mods & GLFW_MOD_ALT) {
+                str = "Alt+" + str;
             }
             if (_mods & GLFW_MOD_CONTROL) {
                 str = "Ctrl+" + str;

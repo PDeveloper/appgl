@@ -11,6 +11,11 @@
 #include <unordered_map>
 #include <vector>
 
+/**
+ * Commandline ARgument Parser
+ * @brief A simple argument parser for command line applications
+*/
+
 namespace carp {
 
 template<typename T>
