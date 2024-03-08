@@ -247,6 +247,14 @@ Texture::~Texture() {
     if (id != -1) glDeleteTextures(1, &id);
 }
 
+void Texture::bind() const {
+    glBindTexture(GL_TEXTURE_2D, id);
+}
+
+void Texture::unbind() const {
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
+}
+
 // Load texture image data from a file
 bool Texture::load(const std::string& image_path) {
     // Load image data
@@ -269,12 +277,8 @@ bool Texture::load(const std::string& image_path) {
     return true;
 }
 
-void Texture::use() {
-    glBindTexture(GL_TEXTURE_2D, id);
-}
-
 // Update the texture with new image data
-bool Texture::update(const unsigned char* data, int new_width, int new_height, GLenum new_format, GLint wrap, GLint filter, GLint type) {
+bool Texture::update(const unsigned char* data, int new_width, int new_height, GLenum new_internal_format, GLenum new_format, GLint wrap, GLint filter, GLint type) {
     if (!data) {
         appgl::logger("GL")->error("Invalid data provided for texture update.");
         return false;
@@ -282,26 +286,26 @@ bool Texture::update(const unsigned char* data, int new_width, int new_height, G
 
     if (!new_width) new_width = width;
     if (!new_height) new_height = height;
+    if (!new_internal_format) new_internal_format = format;
     if (!new_format) new_format = format;
 
-    if (new_format == 0) {
+    if (new_internal_format == 0 || new_format == 0) {
         return false;
     }
 
-    glBindTexture(GL_TEXTURE_2D, id);
-
-    if (new_width == width && new_height == height && new_format == format) {
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, data);
-    } else {
+    // if (new_width == width && new_height == height && new_format == format) {
+    //     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, data);
+    // } else {
         width = new_width;
         height = new_height;
+        internal_format = new_internal_format;
         format = new_format;
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, data);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-    }
+        glTexImage2D(GL_TEXTURE_2D, 0, new_internal_format, width, height, 0, format, type, data);
+    // }
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 
     glGenerateMipmap(GL_TEXTURE_2D);
     return true;

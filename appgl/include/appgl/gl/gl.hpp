@@ -45,6 +45,7 @@ public:
 struct Texture {
     unsigned int id = -1;
     int width, height = 0;
+    GLenum internal_format;
     GLenum format;
 
     Texture();
@@ -52,10 +53,11 @@ struct Texture {
     Texture(const Texture&) = delete;
     ~Texture();
     
-    bool load(const std::string& image_path);
-    bool update(const unsigned char* data, int new_width = 0, int new_height = 0, GLenum new_format = 0, GLint wrap = GL_REPEAT, GLint filter = GL_LINEAR, GLint type = GL_UNSIGNED_BYTE);
+    void bind() const;
+    void unbind() const;
     
-    void use();
+    bool load(const std::string& image_path);
+    bool update(const unsigned char* data, int new_width = 0, int new_height = 0, GLenum new_internal_format = 0, GLenum new_format = 0, GLint wrap = GL_REPEAT, GLint filter = GL_LINEAR, GLint type = GL_UNSIGNED_BYTE);
 };
 
 } // namespace appgl
